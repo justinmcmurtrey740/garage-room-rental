@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>South Austin Garage Apartment</title>
+  <meta name="description" content="Furnished garage apartment for rent in South Austin near Dittmar Park. $1,000/month, all bills paid, private entry, pool access.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #faf7f2;
+      --surface: #ffffff;
+      --text: #2b2622;
+      --muted: #6b625a;
+      --accent: #c2410c;
+      --accent-soft: #fdebdd;
+      --border: #e7e0d6;
+      --radius: 14px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Inter", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    img { max-width: 100%; display: block; }
+    a { color: var(--accent); }
+    .wrap { max-width: 1040px; margin: 0 auto; padding: 0 20px; }
+    h1, h2 { font-family: "Fraunces", Georgia, serif; font-weight: 600; line-height: 1.15; }
+
+    /* Hero */
+    .hero { padding: 56px 0 28px; }
+    .badge {
+      display: inline-block; background: var(--accent-soft); color: var(--accent);
+      font-weight: 600; font-size: .85rem; padding: 4px 12px; border-radius: 999px; margin-bottom: 14px;
+    }
+    .hero h1 { font-size: clamp(2rem, 5vw, 3.2rem); margin-bottom: 12px; }
+    .hero p.lead { font-size: 1.15rem; color: var(--muted); max-width: 660px; }
+    .price-row { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; margin-top: 24px; }
+    .price { font-size: 2rem; font-weight: 600; }
+    .price small { font-size: 1rem; color: var(--muted); font-weight: 400; }
+    .btn {
+      display: inline-block; background: var(--accent); color: #fff; text-decoration: none;
+      padding: 12px 22px; border-radius: 10px; font-weight: 600; border: 0; cursor: pointer; font-size: 1rem;
+    }
+    .btn:hover { filter: brightness(1.08); }
+
+    /* Gallery */
+    .gallery {
+      display: grid; gap: 10px; margin: 20px 0 10px;
+      grid-template-columns: 2fr 1fr 1fr; grid-template-rows: 200px 200px;
+    }
+    .thumbs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+    .thumbs button { height: 160px; }
+    .gallery button, .thumbs button {
+      border: 0; padding: 0; background: var(--accent-soft); border-radius: var(--radius);
+      overflow: hidden; cursor: zoom-in;
+    }
+    .gallery button:first-child { grid-row: span 2; }
+    .gallery img, .thumbs img { width: 100%; height: 100%; object-fit: cover; transition: transform .3s; }
+    .gallery button:hover img, .thumbs button:hover img { transform: scale(1.03); }
+    .hint { font-size: .85rem; color: var(--muted); margin-top: 8px; }
+
+    /* Lightbox */
+    .lightbox {
+      position: fixed; inset: 0; background: rgba(20,16,12,.92); display: none;
+      align-items: center; justify-content: center; z-index: 10; padding: 20px;
+    }
+    .lightbox.open { display: flex; }
+    .lightbox img { max-height: 88vh; max-width: 100%; border-radius: 8px; }
+    .lightbox .cap { position: absolute; bottom: 18px; left: 0; right: 0; text-align: center; color: #eee; font-size: .95rem; }
+    .lb-btn {
+      position: absolute; background: rgba(255,255,255,.15); color: #fff; border: 0;
+      width: 44px; height: 44px; border-radius: 50%; font-size: 1.4rem; cursor: pointer;
+    }
+    .lb-btn:hover { background: rgba(255,255,255,.3); }
+    .lb-close { top: 16px; right: 16px; }
+    .lb-prev { left: 16px; top: 50%; transform: translateY(-50%); }
+    .lb-next { right: 16px; top: 50%; transform: translateY(-50%); }
+
+    /* Sections */
+    section { padding: 36px 0; }
+    section h2 { font-size: 1.8rem; margin-bottom: 18px; }
+    .grid-2 { display: grid; grid-template-columns: 1.4fr 1fr; gap: 28px; align-items: start; }
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 24px;
+    }
+    .features { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 10px 20px; }
+    .features li { display: flex; gap: 8px; }
+    .features li::before { content: "✓"; color: var(--accent); font-weight: 700; }
+    .facts { list-style: none; }
+    .facts li { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .facts li:last-child { border-bottom: 0; }
+    .facts span:first-child { color: var(--muted); }
+    .facts span:last-child { font-weight: 600; text-align: right; }
+    .note {
+      background: var(--accent-soft); border-radius: 10px; padding: 14px 16px; margin-top: 18px; font-size: .95rem;
+    }
+
+    /* Form */
+    form { display: grid; gap: 14px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    label { font-size: .9rem; font-weight: 500; display: block; margin-bottom: 4px; }
+    input, textarea {
+      width: 100%; padding: 11px 12px; border: 1px solid var(--border); border-radius: 8px;
+      font: inherit; background: #fff; color: var(--text);
+    }
+    textarea { min-height: 100px; resize: vertical; }
+    .help { font-size: .8rem; color: var(--muted); margin-top: 4px; }
+    .hidden { display: none; }
+
+    footer { padding: 32px 0 48px; color: var(--muted); font-size: .9rem; text-align: center; }
+
+    @media (max-width: 760px) {
+      .grid-2, .form-row, .features { grid-template-columns: 1fr; }
+      .gallery { grid-template-columns: 1fr 1fr; grid-template-rows: 220px 130px 130px; }
+      .gallery button:first-child { grid-column: span 2; grid-row: auto; }
+      .thumbs { grid-template-columns: 1fr 1fr; }
+      .thumbs button { height: 200px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="hero">
+    <div class="wrap">
+      <span class="badge">South Austin · Near Dittmar Park</span>
+      <h1>Furnished garage apartment for rent</h1>
+      <p class="lead">
+        A clean, fully finished garage apartment with its own private entrance, a few blocks from
+        Dittmar Recreation Park. All bills paid, and you get full access to the backyard pool.
+      </p>
+      <div class="price-row">
+        <div class="price">$1,000<small> / month · all bills paid</small></div>
+        <a class="btn" href="#contact">Ask about the apartment</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <div class="gallery">
+      <button data-i="0"><img src="images/room1.jpg" alt="Living area with kitchenette, ceiling fan, and bistro table"></button>
+      <button data-i="1"><img src="images/room2.jpg" alt="Full-size bed and private exterior door"></button>
+      <button data-i="2"><img src="images/room3.jpg" alt="Kitchenette with sink, burners, and small refrigerator"></button>
+      <button data-i="3"><img src="images/room4.jpg" alt="Bistro table, microwave, and TV area"></button>
+      <button data-i="4"><img src="images/room5.jpg" alt="Private entry door"></button>
+    </div>
+    <div class="thumbs">
+      <button data-i="5"><img src="images/room6.jpg" alt="Full bathroom with toilet and vanity"></button>
+      <button data-i="6"><img src="images/room7.jpg" alt="Shower in the full bathroom"></button>
+      <button data-i="7"><img src="images/room8.jpg" alt="Walk-in closet with hanging rods and shelf"></button>
+      <button data-i="8"><img src="images/room9.jpg" alt="Bistro table nook by the laundry room door"></button>
+      <button data-i="9"><img src="images/room10.jpg" alt="Laundry room with washer and dryer. The door to the main house stays permanently locked."></button>
+    </div>
+    <p class="hint">Tap any photo to enlarge.</p>
+
+    <section>
+      <div class="grid-2">
+        <div>
+          <h2>The space</h2>
+          <p>
+            You'll have your own separate exterior door, so there's no shared indoor living space.
+            The apartment has a kitchenette for small meals, a walk-in closet, a pantry area, and its own full bathroom.
+            It comes furnished with a full-size bed, which can be removed if you'd rather bring your own.
+          </p>
+          <p style="margin-top:12px">
+            There's no access to the main house, but you'll share the washer and dryer,
+            and the backyard pool is yours to enjoy.
+          </p>
+          <br>
+          <h2>What's included</h2>
+          <ul class="features">
+            <li>Private exterior entry</li>
+            <li>Your own parking spot</li>
+            <li>All utilities included</li>
+            <li>Full-size bed (optional)</li>
+            <li>Small refrigerator</li>
+            <li>Sink &amp; two electric burners</li>
+            <li>Ice machine</li>
+            <li>Coffee maker</li>
+            <li>Walk-in closet</li>
+            <li>Pantry area</li>
+            <li>Full private bathroom</li>
+            <li>Shared washer &amp; dryer</li>
+            <li>Backyard swimming pool</li>
+          </ul>
+        </div>
+
+        <aside class="card">
+          <h2 style="font-size:1.4rem">Quick facts</h2>
+          <ul class="facts">
+            <li><span>Rent</span><span>$1,000/mo</span></li>
+            <li><span>Deposit</span><span>$400</span></li>
+            <li><span>Utilities</span><span>All bills paid</span></li>
+            <li><span>Furnished</span><span>Yes</span></li>
+            <li><span>Laundry</span><span>Shared</span></li>
+            <li><span>Pets</span><span>No additional pets</span></li>
+            <li><span>Location</span><span>South Austin</span></li>
+          </ul>
+          <div class="note">
+            🐾 Three friendly dogs live in the main house, so we're not able to accept additional pets.
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="card">
+        <h2>Interested? Send a message</h2>
+        <p style="color:var(--muted);margin-bottom:18px">
+          Please include a brief introduction and your typical weekly work schedule.
+        </p>
+
+        <!-- Netlify Forms: submissions show up in your Netlify dashboard under "Forms". -->
+        <form name="apartment-inquiry" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/thanks.html">
+          <input type="hidden" name="form-name" value="apartment-inquiry">
+          <p class="hidden"><label>Don't fill this out: <input name="bot-field"></label></p>
+
+          <div class="form-row">
+            <div><label for="name">Name</label><input id="name" name="name" required></div>
+            <div><label for="email">Email</label><input id="email" name="email" type="email" required></div>
+          </div>
+          <div class="form-row">
+            <div><label for="phone">Phone (optional)</label><input id="phone" name="phone" type="tel"></div>
+            <div><label for="movein">Desired move-in date</label><input id="movein" name="move-in" type="date"></div>
+          </div>
+          <div>
+            <label for="intro">Brief introduction</label>
+            <textarea id="intro" name="introduction" required placeholder="A little about yourself: what you do, how long you'd like to stay, etc."></textarea>
+          </div>
+          <div>
+            <label for="schedule">Typical weekly work schedule</label>
+            <input id="schedule" name="work-schedule" required placeholder="e.g. Mon–Fri, 8am–5pm">
+          </div>
+          <div>
+            <label for="park">Spam check: what park is nearby?</label>
+            <input id="park" name="spam-check" required pattern="\s*[Dd][Ii][Tt][Tt][Mm][Aa][Rr].*" title='Type "Dittmar Park"'>
+            <p class="help">Type "Dittmar Park" so I know you're a real person.</p>
+          </div>
+          <div><button class="btn" type="submit">Send inquiry</button></div>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="wrap">Garage apartment for rent · South Austin, TX · Equal housing opportunity</div>
+  </footer>
+
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer">
+    <button class="lb-btn lb-close" aria-label="Close">×</button>
+    <button class="lb-btn lb-prev" aria-label="Previous photo">‹</button>
+    <img alt="">
+    <button class="lb-btn lb-next" aria-label="Next photo">›</button>
+    <div class="cap"></div>
+  </div>
+
+  <script>
+    const photos = [...document.querySelectorAll('[data-i] img')];
+    const lb = document.getElementById('lightbox');
+    const lbImg = lb.querySelector('img');
+    const cap = lb.querySelector('.cap');
+    let cur = 0;
+    function show(i) {
+      cur = (i + photos.length) % photos.length;
+      lbImg.src = photos[cur].src;
+      lbImg.alt = cap.textContent = photos[cur].alt;
+      lb.classList.add('open');
+    }
+    document.querySelectorAll('[data-i]').forEach(b => b.addEventListener('click', () => show(+b.dataset.i)));
+    lb.querySelector('.lb-close').onclick = () => lb.classList.remove('open');
+    lb.querySelector('.lb-prev').onclick = e => { e.stopPropagation(); show(cur - 1); };
+    lb.querySelector('.lb-next').onclick = e => { e.stopPropagation(); show(cur + 1); };
+    lb.addEventListener('click', e => { if (e.target === lb) lb.classList.remove('open'); });
+    document.addEventListener('keydown', e => {
+      if (!lb.classList.contains('open')) return;
+      if (e.key === 'Escape') lb.classList.remove('open');
+      if (e.key === 'ArrowLeft') show(cur - 1);
+      if (e.key === 'ArrowRight') show(cur + 1);
+    });
+  </script>
+</body>
+</html>
