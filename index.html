@@ -215,10 +215,10 @@
           Please include a brief introduction and your typical weekly work schedule.
         </p>
 
-        <!-- Netlify Forms: submissions show up in your Netlify dashboard under "Forms". -->
-        <form name="apartment-inquiry" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/thanks.html">
-          <input type="hidden" name="form-name" value="apartment-inquiry">
-          <p class="hidden"><label>Don't fill this out: <input name="bot-field"></label></p>
+        <!-- Formspree: submissions are emailed to you and listed at formspree.io. -->
+        <form id="inquiry" method="POST" action="https://formspree.io/f/xkjrjqne">
+          <input type="hidden" name="_subject" value="New room inquiry">
+          <p class="hidden"><label>Don't fill this out: <input name="_gotcha" tabindex="-1" autocomplete="off"></label></p>
 
           <div class="form-row">
             <div><label for="name">Name</label><input id="name" name="name" required></div>
@@ -261,6 +261,22 @@
   </div>
 
   <script>
+    // Send the form to Formspree in the background, then show the thanks page.
+    const form = document.getElementById('inquiry');
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      const btn = form.querySelector('button');
+      btn.disabled = true; btn.textContent = 'Sending…';
+      try {
+        const res = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } });
+        if (!res.ok) throw new Error();
+        location.href = 'thanks.html';
+      } catch {
+        alert('Sorry, that didn\'t send. Please try again in a minute.');
+        btn.disabled = false; btn.textContent = 'Send inquiry';
+      }
+    });
+
     const photos = [...document.querySelectorAll('[data-i] img')];
     const lb = document.getElementById('lightbox');
     const lbImg = lb.querySelector('img');
